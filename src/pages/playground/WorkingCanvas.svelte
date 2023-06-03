@@ -18,7 +18,7 @@
     }
 
     function handelMouseWheel(event) {
-        if (boxref != null && boxref != undefined) {
+        if (boxref != null && boxref != undefined && event.target == canvasRef) {
             if (event.deltaY > 0) {
                 var scrollPosition = 1;
             } else {
