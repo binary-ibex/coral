@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 
+export let selectedTable = writable(null);
 
 export let schema = writable({
 	name: "Schema Name",
@@ -12,7 +13,6 @@ export let schema = writable({
 				width: 300,
 				height: 300
 			},
-
 			columns: [
 				{
 					name: "name",
@@ -50,7 +50,6 @@ export let schema = writable({
 				width: 300,
 				height: 157
 			},
-
 			columns: [
 				{
 					name: "name",

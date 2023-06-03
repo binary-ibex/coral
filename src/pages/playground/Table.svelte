@@ -1,12 +1,18 @@
 <script>
     import { onMount } from "svelte";
-    import { schema } from "../../stores/schema.js";
+    import { schema, selectedTable } from "../../stores/schema";
     export let table;
 
     let localScheme;
     var boxRef;
     let xOffset, yOffset;
     let selectionLocked = false;
+    let isTableSelected = false;
+    let initBoxPosX, initBoxPosY;
+
+    selectedTable.subscribe((value) => {
+        isTableSelected = value === table;
+    });
 
     schema.subscribe((value) => {
         localScheme = value;
@@ -14,6 +20,8 @@
 
     function lockSelection(event) {
         selectionLocked = true;
+        initBoxPosX= boxRef.offsetLeft;
+        initBoxPosY = boxRef.offsetTop;
         xOffset = event.clientX - boxRef.offsetLeft;
         yOffset = event.clientY - boxRef.offsetTop;
     }
@@ -24,6 +32,10 @@
 
     function handelMouseUp(event) {
         selectionLocked = false;
+        if (initBoxPosX == boxRef.offsetLeft && initBoxPosY == boxRef.offsetTop) {
+            isTableSelected = true;
+            selectedTable.set(table);
+        }
     }
 
     function handelMouseMove(event) {
@@ -40,16 +52,17 @@
         boxRef.style.left = table.position.left + "px";
         boxRef.style.top = table.position.top + "px";
     });
+
 </script>
 
 <svelte:window on:mousemove={handelMouseMove} on:mouseup={handelMouseUp} />
 <div
-    class="table-card"
+    class={"table-card" + (isTableSelected==true?" table-card-selected":"")}
     on:mousedown={(e) => handleMouseDown(e)}
     bind:this={boxRef}
 >
-    <div class="table-name">
-        <h3>{table.name}</h3>
+    <div class={"table-name" + (isTableSelected==true?" table-name-selected": "")}>
+        <span>{table.name}</span>
     </div>
     <div class="table-columns">
         {#each table.columns as col}
@@ -72,9 +85,13 @@
         background-color: #fff;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-top: 7px solid rgb(241, 80, 107);
         user-select: none;
         cursor: pointer;
+        overflow: hidden;
+    }
+
+    .table-card-selected {
+        border: 4px solid #5A67D8;
     }
 
     .table-columns {
@@ -83,16 +100,20 @@
     }
 
     .table-name {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 40px;
+        display: inline-block;
+        text-align: center;
         font-weight: 500;
         background-color: rgb(235, 244, 255);
         color: #140f1fad;
         border-left: 1px solid rgb(222, 229, 236);
         border-bottom: 1px solid rgb(222, 229, 236);
         border-right: 1px solid rgb(222, 229, 236);
+        border-top: 7px solid rgb(241, 80, 107);
+        padding: 10px 0px;
+    }
+    .table-name-selected {
+        border-left: 0px solid;
+        border-right: 0px solid;
     }
 
     .table-column {
