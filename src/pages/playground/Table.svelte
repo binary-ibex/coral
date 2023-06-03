@@ -54,6 +54,7 @@
     <div class="table-columns">
         {#each table.columns as col}
             <div class="table-column">
+                <div class="column-constrain"></div>
                 <div class="field-name">{col.name}</div>
                 <div class="field-type">{col.type}</div>
             </div>
@@ -79,7 +80,6 @@
     .table-columns {
         display: flex;
         flex-direction: column;
-        padding: 10px;
     }
 
     .table-name {
@@ -89,7 +89,7 @@
         height: 40px;
         font-weight: 500;
         background-color: rgb(235, 244, 255);
-        color: rgba(0, 0, 0, 0.863);
+        color: #140f1fad;
         border-left: 1px solid rgb(222, 229, 236);
         border-bottom: 1px solid rgb(222, 229, 236);
         border-right: 1px solid rgb(222, 229, 236);
@@ -99,18 +99,35 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 30px;
-        margin-bottom: 5px;
+        padding: 7px 0px;
+    }
+
+    .table-column:hover {
+        background-color: rgb(245,247,250);
+        border-radius: 5px;
+    }
+    .table-column:hover .field-name  {
+        color: rgb(94, 32, 94);
+    }
+    .table-column:hover .field-type  {
+        color: rgb(94, 32, 94);
     }
 
     .field-name {
         flex-grow: 1;
         text-align: left;
-        color: rgb(99, 112, 163);
+        color: rgb(91, 97, 126);
     }
+    
 
     .field-type {
         text-align: right;
         color: rgb(178, 178, 178);
+        padding-right: 10px;
     }
+
+    .column-constrain {
+        width: 25px;
+    }
+
 </style>

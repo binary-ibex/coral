@@ -5,9 +5,9 @@
 </script>
 
 <div class="playground">
-    <Topbar />
-    <Sidebar />
     <WorkingCanvas />
+    <Sidebar />
+    <Topbar />
 </div>
 
 <style>

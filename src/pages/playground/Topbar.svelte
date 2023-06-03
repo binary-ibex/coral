@@ -13,6 +13,8 @@
         align-items: center;
         width: 100%;
         padding: 10px;
+        position: relative;
+        box-shadow: black 0px 0px 10px -5px;
     }
 
     .heading {
