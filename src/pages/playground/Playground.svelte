@@ -22,5 +22,6 @@
         grid-template-rows: 50px;
         grid-template-columns: 350px;
         overflow: hidden;
+        position: relative;
     }
 </style>
