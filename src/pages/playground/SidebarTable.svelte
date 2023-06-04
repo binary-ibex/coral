@@ -1,13 +1,10 @@
 <script>
-    import { schema, selectedTable } from "../../stores/schema";
+    import { selectedTable } from "../../stores/schema";
     export let table;
-    let isTableExpanded = false;
-
-    selectedTable.subscribe((value) => {
-        isTableExpanded = value === table
-    });
+    export let isTableExpanded = false;
 
     function handelTableSelection(e) {
+        console.log(e.target)
         if (isTableExpanded==true) {
             isTableExpanded = false;
         } else {

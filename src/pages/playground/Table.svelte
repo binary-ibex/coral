@@ -20,7 +20,7 @@
 
     function lockSelection(event) {
         selectionLocked = true;
-        initBoxPosX= boxRef.offsetLeft;
+        initBoxPosX = boxRef.offsetLeft;
         initBoxPosY = boxRef.offsetTop;
         xOffset = event.clientX - boxRef.offsetLeft;
         yOffset = event.clientY - boxRef.offsetTop;
@@ -32,10 +32,6 @@
 
     function handelMouseUp(event) {
         selectionLocked = false;
-        if (initBoxPosX == boxRef.offsetLeft && initBoxPosY == boxRef.offsetTop) {
-            isTableSelected = true;
-            selectedTable.set(table);
-        }
     }
 
     function handelMouseMove(event) {
@@ -48,26 +44,30 @@
         }
     }
 
+
     onMount(() => {
         boxRef.style.left = table.position.left + "px";
         boxRef.style.top = table.position.top + "px";
     });
-
 </script>
 
 <svelte:window on:mousemove={handelMouseMove} on:mouseup={handelMouseUp} />
 <div
-    class={"table-card" + (isTableSelected==true?" table-card-selected":"")}
+    class={"table-card" +
+        (isTableSelected == true ? " table-card-selected" : "")}
     on:mousedown={(e) => handleMouseDown(e)}
     bind:this={boxRef}
 >
-    <div class={"table-name" + (isTableSelected==true?" table-name-selected": "")}>
+    <div
+        class={"table-name" +
+            (isTableSelected == true ? " table-name-selected" : "")}
+    >
         <span>{table.name}</span>
     </div>
     <div class="table-columns">
         {#each table.columns as col}
             <div class="table-column">
-                <div class="column-constrain"></div>
+                <div class="column-constrain" />
                 <div class="field-name">{col.name}</div>
                 <div class="field-type">{col.type}</div>
             </div>
@@ -91,7 +91,7 @@
     }
 
     .table-card-selected {
-        border: 4px solid #5A67D8;
+        border: 4px solid #5a67d8;
     }
 
     .table-columns {
@@ -124,13 +124,13 @@
     }
 
     .table-column:hover {
-        background-color: rgb(245,247,250);
+        background-color: rgb(245, 247, 250);
         border-radius: 5px;
     }
-    .table-column:hover .field-name  {
+    .table-column:hover .field-name {
         color: rgb(94, 32, 94);
     }
-    .table-column:hover .field-type  {
+    .table-column:hover .field-type {
         color: rgb(94, 32, 94);
     }
 
@@ -139,7 +139,6 @@
         text-align: left;
         color: rgb(91, 97, 126);
     }
-    
 
     .field-type {
         text-align: right;
@@ -150,5 +149,4 @@
     .column-constrain {
         width: 25px;
     }
-
 </style>

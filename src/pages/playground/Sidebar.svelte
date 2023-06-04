@@ -1,6 +1,9 @@
 <script>
     import SidebarTable from "./SidebarTable.svelte";
-    import { schema } from "../../stores/schema";
+    import { schema,selectedTable } from "../../stores/schema";
+
+    $: activeTable = $selectedTable;
+
 </script>
 
 <div class="sidebar">
@@ -10,7 +13,7 @@
             <button class="sidebar-new-table-button"> <span class="add_icon">+</span>  New Table </button>
         </div>
         {#each $schema.tables as table}
-            <SidebarTable {table} />
+            <SidebarTable {table} isTableExpanded={table === activeTable}/>
         {/each}
     </div>
 </div>
