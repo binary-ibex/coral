@@ -1,32 +1,45 @@
 <script>
-    import { selectedTable } from "../../stores/schema";
+    import { selectedTable, selectedColumn } from "../../stores/schema";
     export let table;
     export let isTableExpanded = false;
 
+    function handelColumnClick(event, col) {
+        event.stopPropagation();
+        selectedTable.set(table);
+        selectedColumn.set(col);
+    }
+
     function handelTableSelection(e) {
-        console.log(e.target)
-        if (isTableExpanded==true) {
+        e.stopPropagation();
+        if (isTableExpanded == true) {
             isTableExpanded = false;
         } else {
             selectedTable.set(table);
         }
     }
-
 </script>
 
-<div
-    class="sidebar-table-card"
-    on:click={handelTableSelection}
-    on:keydown={handelTableSelection}
->
-    <div class={"sidebar-table-name" + (isTableExpanded==true?" sidebar-table-name-selected":"")}>
+<div class="sidebar-table-card">
+    <div
+        class={"sidebar-table-name" +
+            (isTableExpanded == true ? " sidebar-table-name-selected" : "")}
+        on:click={handelTableSelection}
+        on:keydown={handelTableSelection}
+    >
         {table.name}
     </div>
 
     {#if isTableExpanded}
         <div class="sidebar-table-details">
             {#each table.columns as column}
-                <div class="sidebar-table-column">
+                <div
+                    on:click={(e) => handelColumnClick(e, column)}
+                    on:keydown={(e) => handelColumnClick(e, column)}
+                    class={"sidebar-table-column" +
+                        ($selectedColumn == column
+                            ? " sidebar-table-column-selected"
+                            : "")}
+                >
                     <input
                         class="sidebar-table-field-name"
                         type="text"
@@ -74,15 +87,19 @@
     }
 
     .sidebar-table-name-selected {
-        color: #4338CA;
+        color: #4338ca;
         font-weight: bold;
-        background-color: #C7D2FE;
+        background-color: #c7d2fe;
     }
 
     .sidebar-table-column {
         display: flex;
         flex-direction: row;
         padding: 8px 4px 8px 4px;
+    }
+
+    .sidebar-table-column-selected {
+        background-color: rgb(230, 241, 253);
     }
 
     .sidebar-table-field-name {

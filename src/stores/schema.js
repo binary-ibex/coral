@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
 
 export let selectedTable = writable(null);
+export let selectedColumn = writable(null);
 
 export let schema = writable({
 	name: "Schema Name",

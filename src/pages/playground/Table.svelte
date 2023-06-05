@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { schema, selectedTable } from "../../stores/schema";
+    import { schema, selectedTable, selectedColumn } from "../../stores/schema";
     export let table;
 
     let localScheme;
@@ -8,7 +8,12 @@
     let xOffset, yOffset;
     let selectionLocked = false;
     let isTableSelected = false;
-    let initBoxPosX, initBoxPosY;
+
+    function handelColumnClick(event, col) {
+        event.stopPropagation();
+        selectedTable.set(table);
+        selectedColumn.set(col);
+    }
 
     selectedTable.subscribe((value) => {
         isTableSelected = value === table;
@@ -20,8 +25,6 @@
 
     function lockSelection(event) {
         selectionLocked = true;
-        initBoxPosX = boxRef.offsetLeft;
-        initBoxPosY = boxRef.offsetTop;
         xOffset = event.clientX - boxRef.offsetLeft;
         yOffset = event.clientY - boxRef.offsetTop;
     }
@@ -44,7 +47,6 @@
         }
     }
 
-
     onMount(() => {
         boxRef.style.left = table.position.left + "px";
         boxRef.style.top = table.position.top + "px";
@@ -66,7 +68,11 @@
     </div>
     <div class="table-columns">
         {#each table.columns as col}
-            <div class="table-column">
+            <div
+                class="table-column"
+                on:click={(e) => handelColumnClick(e, col)}
+                on:keydown={(e) => handelColumnClick(e, col)}
+            >
                 <div class="column-constrain" />
                 <div class="field-name">{col.name}</div>
                 <div class="field-type">{col.type}</div>
