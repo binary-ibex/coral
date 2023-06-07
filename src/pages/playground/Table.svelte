@@ -6,13 +6,23 @@
     let localScheme;
     var boxRef;
     let xOffset, yOffset;
+    let ix, iy;
     let selectionLocked = false;
     let isTableSelected = false;
 
-    function handelColumnClick(event, col) {
-        event.stopPropagation();
-        selectedTable.set(table);
-        selectedColumn.set(col);
+    function handelColumnClick(e, col) {
+        if (ix == e.clientX && iy == e.clientY) {
+            e.stopPropagation();
+            selectedTable.set(table);
+            selectedColumn.set(col);
+        }
+    }
+
+    function handelTableSelection(e) {
+        if (ix == e.clientX && iy == e.clientY) {
+            e.stopPropagation();
+            selectedTable.set(table);
+        }
     }
 
     selectedTable.subscribe((value) => {
@@ -25,6 +35,8 @@
 
     function lockSelection(event) {
         selectionLocked = true;
+        ix = event.clientX;
+        iy = event.clientY;
         xOffset = event.clientX - boxRef.offsetLeft;
         yOffset = event.clientY - boxRef.offsetTop;
     }
@@ -58,6 +70,8 @@
     class={"table-card" +
         (isTableSelected == true ? " table-card-selected" : "")}
     on:mousedown={(e) => handleMouseDown(e)}
+    on:click={handelTableSelection}
+    on:keydown={handelTableSelection}
     bind:this={boxRef}
 >
     <div
@@ -97,7 +111,7 @@
     }
 
     .table-card-selected {
-        border: 4px solid #5a67d8;
+        border: 3px solid #5a67d8;
     }
 
     .table-columns {

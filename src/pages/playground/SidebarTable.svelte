@@ -1,7 +1,21 @@
 <script>
-    import { selectedTable, selectedColumn } from "../../stores/schema";
+    import { selectedTable, selectedColumn, schema } from "../../stores/schema";
     export let table;
     export let isTableExpanded = false;
+
+  
+
+    $: localSchema = $schema;
+
+    function handleColumnNameInput(event, column) {
+        column.name = event.target.value;
+        schema.set(localSchema);
+    }
+
+    function handleColumnTypeInput(event, column) {
+        column.type = event.target.value;
+        schema.set(localSchema);
+    }
 
     function handelColumnClick(event, col) {
         event.stopPropagation();
@@ -44,12 +58,14 @@
                         class="sidebar-table-field-name"
                         type="text"
                         value={column.name}
+                        on:input={(e) => handleColumnNameInput(e, column)}
                     />
 
                     <input
                         class="sidebar-table-field-type"
                         type="text"
                         value={column.type}
+                        on:input={(e) => handleColumnTypeInput(e,column)}
                     />
 
                     <div class="sidebar-table-field-constraints">
@@ -99,7 +115,7 @@
     }
 
     .sidebar-table-column-selected {
-        background-color: rgb(230, 241, 253);
+        background-color: #f0efef;
     }
 
     .sidebar-table-field-name {
