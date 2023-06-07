@@ -1,11 +1,19 @@
 <script>
     import { selectedTable, selectedColumn, schema } from "../../stores/schema";
+    import Icon from "svelte-icons-pack/Icon.svelte";
+    import AiFillEdit from "svelte-icons-pack/ai/AiFillEdit.js";
+    import AiOutlineCheckCircle from "svelte-icons-pack/ai/AiOutlineCheckCircle.js";
     export let table;
     export let isTableExpanded = false;
-
-  
+    let _editTableName = false;
 
     $: localSchema = $schema;
+
+    function handelTableNameEdit(event) {
+        event.stopPropagation();
+        table.name = event.target.value;
+        schema.set(localSchema);
+    }
 
     function handleColumnNameInput(event, column) {
         column.name = event.target.value;
@@ -35,12 +43,58 @@
 
 <div class="sidebar-table-card">
     <div
-        class={"sidebar-table-name" +
-            (isTableExpanded == true ? " sidebar-table-name-selected" : "")}
+        class={"sidebar-table-header" +
+            (isTableExpanded == true ? " sidebar-table-header-selected" : "")}
         on:click={handelTableSelection}
         on:keydown={handelTableSelection}
     >
-        {table.name}
+        {#if !_editTableName}
+            <div class="sidebar-table-header-table-name">
+                {table.name}
+            </div>
+            <div
+                class="sidebar-table-header-action-icon"
+                on:click={(e) => {
+                    e.stopPropagation();
+                    _editTableName = true;
+                }}
+                on:keydown={(e) => {
+                    e.stopPropagation();
+                    _editTableName = true;
+                }}
+            >
+                <Icon
+                    src={AiFillEdit}
+                    color="#4338ca"
+                    size="20"
+                    className="custom-edit-icon"
+                    title="Edit Table Name"
+                />
+            </div>
+        {:else}
+        <div class="sidebar-table-header-table-name-input">
+            <input type="text" value={table.name} on:input={handelTableNameEdit} on:click={(e) => e.stopPropagation()}>
+        </div>
+        <div
+            class="sidebar-table-header-action-icon"
+            on:click={(e) => {
+                e.stopPropagation();
+                _editTableName = false;
+            }}
+            on:keydown={(e) => {
+                e.stopPropagation();
+                _editTableName = false;
+            }}
+        >
+            <Icon
+                src={AiOutlineCheckCircle}
+                color="#4338ca"
+                size="20"
+                className="custom-edit-icon"
+                title="Edit Table Name"
+            />
+        </div>
+        {/if}
     </div>
 
     {#if isTableExpanded}
@@ -65,7 +119,7 @@
                         class="sidebar-table-field-type"
                         type="text"
                         value={column.type}
-                        on:input={(e) => handleColumnTypeInput(e,column)}
+                        on:input={(e) => handleColumnTypeInput(e, column)}
                     />
 
                     <div class="sidebar-table-field-constraints">
@@ -84,6 +138,9 @@
 </div>
 
 <style>
+    .sidebar-table-header-action-icon {
+        margin-right: 10px;
+    }
     .sidebar-table-card {
         cursor: pointer;
         border-bottom: 1px solid rgb(231, 231, 231);
@@ -93,16 +150,18 @@
         flex-direction: column;
     }
 
-    .sidebar-table-name {
+    .sidebar-table-header {
         padding-left: 10px;
         font-weight: 500;
         font-size: 1.125rem;
         background-color: rgb(241, 245, 249);
         padding-bottom: 0.7rem;
         padding-top: 0.7rem;
+        display: flex;
+        justify-content: space-between;
     }
 
-    .sidebar-table-name-selected {
+    .sidebar-table-header-selected {
         color: #4338ca;
         font-weight: bold;
         background-color: #c7d2fe;
