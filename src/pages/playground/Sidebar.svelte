@@ -1,20 +1,23 @@
 <script>
     import SidebarTable from "./SidebarTable.svelte";
-    import { schema, selectedTable } from "../../stores/schema";
+    import { schema } from "../../stores/schema";
+    let _schema; 
+
+
 </script>
 
 <div class="sidebar">
     <div class="sidebar-tables">
         <div class="sidebar-top-header">
             <div class="sidebar-tables-heading">Tables</div>
-            <button class="sidebar-new-table-button">
+            <button class="sidebar-new-table-button" on:click={(e) => schema.addTable()}>
                 <span class="add_icon">+</span> New Table
             </button>
         </div>
         {#each $schema.tables as table}
             <SidebarTable
                 {table}
-                isTableExpanded={table === $selectedTable}
+                isTableExpanded={table === schema.selectedTable}
             />
         {/each}
     </div>

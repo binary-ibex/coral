@@ -1,5 +1,6 @@
 <script>
-    import { selectedTable, selectedColumn, schema } from "../../stores/schema";
+    import SidebarTableColumn from "./SidebarTableColumn.svelte";
+    import { schema } from "../../stores/schema";
     import Icon from "svelte-icons-pack/Icon.svelte";
     import AiFillEdit from "svelte-icons-pack/ai/AiFillEdit.js";
     import AiOutlineCheckCircle from "svelte-icons-pack/ai/AiOutlineCheckCircle.js";
@@ -7,36 +8,19 @@
     export let isTableExpanded = false;
     let _editTableName = false;
 
-    $: localSchema = $schema;
-
     function handelTableNameEdit(event) {
         event.stopPropagation();
-        table.name = event.target.value;
-        schema.set(localSchema);
-    }
-
-    function handleColumnNameInput(event, column) {
-        column.name = event.target.value;
-        schema.set(localSchema);
-    }
-
-    function handleColumnTypeInput(event, column) {
-        column.type = event.target.value;
-        schema.set(localSchema);
-    }
-
-    function handelColumnClick(event, col) {
-        event.stopPropagation();
-        selectedTable.set(table);
-        selectedColumn.set(col);
+        table.setName(event.target.value);
     }
 
     function handelTableSelection(e) {
-        e.stopPropagation();
-        if (isTableExpanded == true) {
-            isTableExpanded = false;
-        } else {
-            selectedTable.set(table);
+        if (e.type == "click") {
+            e.stopPropagation();
+            if (isTableExpanded == true) {
+                isTableExpanded = false;
+            } else {
+                schema.setSelectedTable(table);
+            }
         }
     }
 </script>
@@ -50,7 +34,7 @@
     >
         {#if !_editTableName}
             <div class="sidebar-table-header-table-name">
-                {table.name}
+                {$table.name}
             </div>
             <div
                 class="sidebar-table-header-action-icon"
@@ -72,72 +56,79 @@
                 />
             </div>
         {:else}
-        <div class="sidebar-table-header-table-name-input">
-            <input type="text" value={table.name} on:input={handelTableNameEdit} on:click={(e) => e.stopPropagation()}>
-        </div>
-        <div
-            class="sidebar-table-header-action-icon"
-            on:click={(e) => {
-                e.stopPropagation();
-                _editTableName = false;
-            }}
-            on:keydown={(e) => {
-                e.stopPropagation();
-                _editTableName = false;
-            }}
-        >
-            <Icon
-                src={AiOutlineCheckCircle}
-                color="#4338ca"
-                size="20"
-                className="custom-edit-icon"
-                title="Edit Table Name"
+            <input
+                class="sidebar-table-header-table-name-input"
+                type="text"
+                value={table.name}
+                on:input={handelTableNameEdit}
+                on:click={(e) => e.stopPropagation()}
             />
-        </div>
+
+            <div
+                class="sidebar-table-header-action-icon"
+                on:click={(e) => {
+                    e.stopPropagation();
+                    _editTableName = false;
+                }}
+                on:keydown={(e) => {
+                    e.stopPropagation();
+                    _editTableName = false;
+                }}
+            >
+                <Icon
+                    src={AiOutlineCheckCircle}
+                    color="#4338ca"
+                    size="20"
+                    className="custom-edit-icon"
+                    title="Edit Table Name"
+                />
+            </div>
         {/if}
     </div>
 
     {#if isTableExpanded}
         <div class="sidebar-table-details">
-            {#each table.columns as column}
-                <div
-                    on:click={(e) => handelColumnClick(e, column)}
-                    on:keydown={(e) => handelColumnClick(e, column)}
-                    class={"sidebar-table-column" +
-                        ($selectedColumn == column
-                            ? " sidebar-table-column-selected"
-                            : "")}
-                >
-                    <input
-                        class="sidebar-table-field-name"
-                        type="text"
-                        value={column.name}
-                        on:input={(e) => handleColumnNameInput(e, column)}
-                    />
-
-                    <input
-                        class="sidebar-table-field-type"
-                        type="text"
-                        value={column.type}
-                        on:input={(e) => handleColumnTypeInput(e, column)}
-                    />
-
-                    <div class="sidebar-table-field-constraints">
-                        <button class="sidebar-table-null-button"> N </button>
-                        <button class="sidebar-table-indextype-button">
-                            I
-                        </button>
-                        <button class="sidebar-table-column-options-button">
-                            ...
-                        </button>
-                    </div>
-                </div>
+            {#each $table.columns as column}
+                <SidebarTableColumn {column} {table} />
             {/each}
+            <div class="sidebar-table-bottom-menu">
+                <button
+                    class="sidebar-table-bottom-menu-button"
+                    on:click={(e) => table.addColumn()}
+                >
+                    Add Column
+                </button>
+                <button class="sidebar-table-bottom-menu-button">
+                    Add Index
+                </button>
+            </div>
         </div>
     {/if}
 </div>
 
 <style>
+    .sidebar-table-header-table-name-input {
+        border: none;
+        padding: 5px;
+        border-radius: 5px;
+    }
+    .sidebar-table-bottom-menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+        padding: 10px;
+    }
+
+    .sidebar-table-bottom-menu-button {
+        background-color: #4338ca;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px 8px 16px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
     .sidebar-table-header-action-icon {
         margin-right: 10px;
     }
@@ -165,61 +156,5 @@
         color: #4338ca;
         font-weight: bold;
         background-color: #c7d2fe;
-    }
-
-    .sidebar-table-column {
-        display: flex;
-        flex-direction: row;
-        padding: 8px 4px 8px 4px;
-    }
-
-    .sidebar-table-column-selected {
-        background-color: #f0efef;
-    }
-
-    .sidebar-table-field-name {
-        width: 40%;
-        padding: 6px;
-        margin-left: 10px;
-        border: 1px solid #e2e8f0;
-        border-radius: 5px;
-        outline: none;
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
-
-    .sidebar-table-field-type {
-        width: 30%;
-        padding: 6px;
-        margin-left: 10px;
-        border: 1px solid #e2e8f0;
-        border-radius: 5px;
-        outline: none;
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
-
-    input[type="text"]:focus {
-        outline: 2px solid #42b8a6;
-    }
-
-    .sidebar-table-field-constraints {
-        width: 30%;
-        display: flex;
-        align-items: center;
-        margin-left: 10px;
-        align-items: stretch;
-    }
-
-    .sidebar-table-field-constraints > button {
-        border: none;
-        padding-left: 5px;
-        padding-right: 5px;
-        flex-grow: 1;
-        background-color: transparent;
-    }
-    .sidebar-table-field-constraints > button:hover {
-        background-color: rgb(241, 245, 249);
-        cursor: pointer;
     }
 </style>
