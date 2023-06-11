@@ -2,7 +2,6 @@
     import Table from "./Table.svelte";
     import { schema } from "../../stores/schema";
 
-    let localScheme;
     var boxref = null;
     var canvasRef = null;
     var is_selected = false;
@@ -42,9 +41,6 @@
         }
     }
 
-    schema.subscribe((value) => {
-        localScheme = value;
-    });
 </script>
 
 <svelte:window
@@ -59,7 +55,7 @@
 >
     <div class="hidden-container" bind:this={boxref}>
         {#each $schema.tables as table}
-            <Table {table} />
+            <Table {table}/>
         {/each}
     </div>
 </div>

@@ -1,44 +1,29 @@
 <script>
+    import TableColumn from "./TableColumn.svelte";
+
     import { onMount } from "svelte";
-    import { schema, selectedTable, selectedColumn } from "../../stores/schema";
+    import { schema } from "../../stores/schema";
     export let table;
 
-    let localScheme;
-    var boxRef;
     let xOffset, yOffset;
     let ix, iy;
     let selectionLocked = false;
-    let isTableSelected = false;
-
-    function handelColumnClick(e, col) {
-        if (ix == e.clientX && iy == e.clientY) {
-            e.stopPropagation();
-            selectedTable.set(table);
-            selectedColumn.set(col);
-        }
-    }
+    let isTableSelected = $schema.selectedTable == table;
+    let isTableDragged = false;
 
     function handelTableSelection(e) {
         if (ix == e.clientX && iy == e.clientY) {
             e.stopPropagation();
-            selectedTable.set(table);
+            schema.setSelectedTable(table);
         }
     }
-
-    selectedTable.subscribe((value) => {
-        isTableSelected = value === table;
-    });
-
-    schema.subscribe((value) => {
-        localScheme = value;
-    });
 
     function lockSelection(event) {
         selectionLocked = true;
         ix = event.clientX;
         iy = event.clientY;
-        xOffset = event.clientX - boxRef.offsetLeft;
-        yOffset = event.clientY - boxRef.offsetTop;
+        xOffset = event.clientX - table.table.offsetLeft;
+        yOffset = event.clientY - table.table.offsetTop;
     }
 
     function handleMouseDown(event) {
@@ -46,6 +31,7 @@
     }
 
     function handelMouseUp(event) {
+        isTableDragged = ix != event.clientX || iy != event.clientY;
         selectionLocked = false;
     }
 
@@ -53,15 +39,14 @@
         if (selectionLocked) {
             table.position.left = event.clientX - xOffset;
             table.position.top = event.clientY - yOffset;
-            boxRef.style.left = `${table.position.left}px`;
-            boxRef.style.top = `${table.position.top}px`;
-            schema.set(localScheme);
+            table.table.style.left = `${table.position.left}px`;
+            table.table.style.top = `${table.position.top}px`;
         }
     }
 
     onMount(() => {
-        boxRef.style.left = table.position.left + "px";
-        boxRef.style.top = table.position.top + "px";
+        table.table.style.left = table.position.left + "px";
+        table.table.style.top = table.position.top + "px";
     });
 </script>
 
@@ -72,25 +57,17 @@
     on:mousedown={(e) => handleMouseDown(e)}
     on:click={handelTableSelection}
     on:keydown={handelTableSelection}
-    bind:this={boxRef}
+    bind:this={table.table}
 >
     <div
         class={"table-name" +
             (isTableSelected == true ? " table-name-selected" : "")}
     >
-        <span>{table.name}</span>
+        <span>{$table.name}</span>
     </div>
     <div class="table-columns">
-        {#each table.columns as col}
-            <div
-                class="table-column"
-                on:click={(e) => handelColumnClick(e, col)}
-                on:keydown={(e) => handelColumnClick(e, col)}
-            >
-                <div class="column-constrain" />
-                <div class="field-name">{col.name}</div>
-                <div class="field-type">{col.type}</div>
-            </div>
+        {#each $table.columns as col}
+            <TableColumn table={table} column={col} isTableDragged={isTableDragged}/>
         {/each}
     </div>
 </div>
