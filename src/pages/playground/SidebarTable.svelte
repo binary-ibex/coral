@@ -25,7 +25,7 @@
     }
 </script>
 
-<div class="sidebar-table-card">
+<div class="sidebar-table-card" style="--side-border-color: {$table.color}">
     <div
         class={"sidebar-table-header" +
             (isTableExpanded == true ? " sidebar-table-header-selected" : "")}
@@ -135,7 +135,7 @@
     .sidebar-table-card {
         cursor: pointer;
         border-bottom: 1px solid rgb(231, 231, 231);
-        border-left: 10px solid #d1c4e9;
+        border-left: 10px solid var(--side-border-color);
         cursor: pointer;
         display: flex;
         flex-direction: column;

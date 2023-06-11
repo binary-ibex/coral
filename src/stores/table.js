@@ -3,6 +3,7 @@ import { Column } from "./column";
 
 export class Table {
 	constructor(name) {
+		this.color = this.getColor();
 		this.name = name;
 		this.position = { left: 0, top: 0 };
 		this.tableElement = null;
@@ -22,18 +23,24 @@ export class Table {
 		this._store.set(this);
 	}
 
-    setName(name) {
-        this.name = name;
-        this._store.set(this);
-    }
+	setName(name) {
+		this.name = name;
+		this._store.set(this);
+	}
 
-    setTableElement(tableElement) {
-        this.tableElement = tableElement;
-        this._store.set(this);
-    }
+	setTableElement(tableElement) {
+		this.tableElement = tableElement;
+		this._store.set(this);
+	}
 
 	subscribe(subscriber) {
 		return this._store.subscribe(subscriber);
 	}
 
+	getColor(){ 
+		return `hsla(${~~(360 * Math.random())}, 70%,  72%, 0.8)`
+	  }
+
 }
+
+  

@@ -60,6 +60,7 @@
     bind:this={table.table}
 >
     <div
+        style="--top-border-color: {$table.color}"
         class={"table-name" +
             (isTableSelected == true ? " table-name-selected" : "")}
     >
@@ -99,13 +100,14 @@
     .table-name {
         display: inline-block;
         text-align: center;
-        font-weight: 500;
         background-color: rgb(235, 244, 255);
-        color: #140f1fad;
+        color: #614bcd;
+        font-weight: 1000;
+        font-size: 1.1em;
         border-left: 1px solid rgb(222, 229, 236);
         border-bottom: 1px solid rgb(222, 229, 236);
         border-right: 1px solid rgb(222, 229, 236);
-        border-top: 7px solid rgb(241, 80, 107);
+        border-top: 10px solid var(--top-border-color);
         padding: 10px 0px;
     }
     .table-name-selected {
