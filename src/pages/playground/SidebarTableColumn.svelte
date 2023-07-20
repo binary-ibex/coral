@@ -1,6 +1,6 @@
 <script>
     import { schema } from "../../stores/schema";
-
+    
     export let column;
     export let table;
 
@@ -44,11 +44,8 @@
         on:input={(e) => handleColumnTypeInput(e, column)}
     />
 
-    <div class="sidebar-table-field-constraints">
-        <button class="sidebar-table-null-button"> N </button>
-        <button class="sidebar-table-indextype-button"> I </button>
-        <button class="sidebar-table-column-options-button"> ... </button>
-    </div>
+    
+
 </div>
 
 <style>
@@ -95,17 +92,5 @@
         align-items: center;
         margin-left: 10px;
         align-items: stretch;
-    }
-
-    .sidebar-table-field-constraints > button {
-        border: none;
-        padding-left: 5px;
-        padding-right: 5px;
-        flex-grow: 1;
-        background-color: transparent;
-    }
-    .sidebar-table-field-constraints > button:hover {
-        background-color: rgb(241, 245, 249);
-        cursor: pointer;
     }
 </style>
