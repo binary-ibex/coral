@@ -48,7 +48,7 @@
     }
 
     .sidebar-new-table-button {
-        background-color: rgb(66, 184, 166);
+        background-color: #3dc566;
         color: white;
         border: none;
         border-radius: 5px;

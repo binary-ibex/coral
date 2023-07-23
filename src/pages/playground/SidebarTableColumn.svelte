@@ -1,9 +1,11 @@
 <script>
+    import Icon from "svelte-icons-pack";
     import { schema } from "../../stores/schema";
-    
+    import AiOutlineMenu from "svelte-icons-pack/ai/AiOutlineMenu";
+
     export let column;
     export let table;
-
+    let showColumnMenu = false; 
 
     function handleColumnNameInput(event, column) {
         event.stopPropagation();
@@ -20,6 +22,9 @@
         schema.setSelectedColumn(col, table);
     }
 
+    function handelMenuClick(event) {
+        showColumnMenu = true; 
+    } 
 </script>
 
 <div
@@ -43,13 +48,22 @@
         value={$column.type}
         on:input={(e) => handleColumnTypeInput(e, column)}
     />
+    <div class="sidebar-table-field-constraints">
+        <Icon
+        src={AiOutlineMenu}
+        color="#4338ca"
+        size="20"
+        className="custom-edit-icon"
+        title="Edit Table Name"
+    />
+    <div class="column-menu">
 
+    </div>
+    </div>
     
-
 </div>
 
 <style>
-
     .sidebar-table-column {
         display: flex;
         flex-direction: row;
@@ -72,7 +86,7 @@
     }
 
     .sidebar-table-field-type {
-        width: 30%;
+        width: 40%;
         padding: 6px;
         margin-left: 10px;
         border: 1px solid #e2e8f0;
@@ -87,10 +101,21 @@
     }
 
     .sidebar-table-field-constraints {
-        width: 30%;
+        width: 10%;
         display: flex;
-        align-items: center;
         margin-left: 10px;
-        align-items: stretch;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .column-menu {
+        height: 300px; 
+        width: 200px;
+        background-color: black;
+        position: absolute;
+        top: 300px; 
+        left: 300px;
+        z-index: 1000;
     }
 </style>
