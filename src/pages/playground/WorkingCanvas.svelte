@@ -70,7 +70,7 @@
         grid-area: workingcanvas;
         width: 100%;
         height: 100%;
-        background-color: rgb(242, 246, 248);
+        background-color: rgb(250, 247, 253);
         overflow: hidden;
         position: relative;
     }
