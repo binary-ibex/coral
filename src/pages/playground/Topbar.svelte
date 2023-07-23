@@ -6,7 +6,7 @@
 
 <style>
     .top-bar {
-        background-color: rgb(99,102,241);
+        background-color: #3dc566;
         color: white;
         grid-area: topbar;
         display: flex;

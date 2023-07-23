@@ -4,6 +4,7 @@
     import Icon from "svelte-icons-pack/Icon.svelte";
     import AiFillEdit from "svelte-icons-pack/ai/AiFillEdit.js";
     import AiOutlineCheckCircle from "svelte-icons-pack/ai/AiOutlineCheckCircle.js";
+    import AiOutlineDelete from "svelte-icons-pack/ai/AiOutlineDelete";
     export let table;
     export let isTableExpanded = false;
     let _editTableName = false;
@@ -23,6 +24,11 @@
             }
         }
     }
+
+    function handelTableDelete(e) {
+        e.stopPropagation();
+        schema.removeTable(table);
+    }
 </script>
 
 <div class="sidebar-table-card" style="--side-border-color: {$table.color}">
@@ -36,24 +42,38 @@
             <div class="sidebar-table-header-table-name">
                 {$table.name}
             </div>
-            <div
-                class="sidebar-table-header-action-icon"
-                on:click={(e) => {
-                    e.stopPropagation();
-                    _editTableName = true;
-                }}
-                on:keydown={(e) => {
-                    e.stopPropagation();
-                    _editTableName = true;
-                }}
-            >
-                <Icon
-                    src={AiFillEdit}
-                    color="#4338ca"
-                    size="20"
-                    className="custom-edit-icon"
-                    title="Edit Table Name"
-                />
+            <div class="sidebar-table-header-action-icon-container">
+                <div
+                    class="sidebar-table-header-action-icon"
+                    on:click={(e) => {
+                        e.stopPropagation();
+                        _editTableName = true;
+                    }}
+                    on:keydown={(e) => {
+                        e.stopPropagation();
+                        _editTableName = true;
+                    }}
+                >
+                    <Icon
+                        src={AiFillEdit}
+                        color="#4338ca"
+                        size="20"
+                        className="custom-edit-icon"
+                        title="Edit Table Name"
+                    />
+                </div>
+                <div
+                    class="sidebar-table-header-action-icon"
+                    on:click={handelTableDelete}
+                    on:keydown={handelTableDelete}
+                >
+                    <Icon
+                        src={AiOutlineDelete}
+                        color="#4338ca"
+                        size="20"
+                        title="Edit Table Name"
+                    />
+                </div>
             </div>
         {:else}
             <input
@@ -111,6 +131,7 @@
         border: none;
         padding: 5px;
         border-radius: 5px;
+        font-size: 1.125rem;
     }
     .sidebar-table-bottom-menu {
         display: flex;
@@ -120,7 +141,7 @@
     }
 
     .sidebar-table-bottom-menu-button {
-        background-color: #4338ca;
+        background-color: #3dc566;
         color: white;
         border: none;
         border-radius: 4px;
@@ -129,9 +150,6 @@
         cursor: pointer;
     }
 
-    .sidebar-table-header-action-icon {
-        margin-right: 10px;
-    }
     .sidebar-table-card {
         cursor: pointer;
         border-bottom: 1px solid rgb(231, 231, 231);
@@ -153,8 +171,17 @@
     }
 
     .sidebar-table-header-selected {
-        color: #4338ca;
+        color: #14049b;
         font-weight: bold;
-        background-color: #c7d2fe;
+        background-color: #d3ffd2;
+    }
+
+    .sidebar-table-header-action-icon-container {
+        display: flex;
+        min-width: 0;
+    }
+
+    .sidebar-table-header-action-icon {
+        margin-right: 10px;
     }
 </style>
