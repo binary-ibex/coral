@@ -8,7 +8,7 @@
     let xOffset, yOffset;
     let ix, iy;
     let selectionLocked = false;
-    let isTableSelected = $schema.selectedTable == table;
+    $: isTableSelected = $schema.selectedTable == table;
     let isTableDragged = false;
 
     function handelTableSelection(e) {
@@ -51,101 +51,45 @@
 </script>
 
 <svelte:window on:mousemove={handelMouseMove} on:mouseup={handelMouseUp} />
+
 <div
-    class={"table-card" +
-        (isTableSelected == true ? " table-card-selected" : "")}
+    class={"table-box" + " " + (isTableSelected == true?"table-box-selected":"")}
     on:mousedown={(e) => handleMouseDown(e)}
     on:click={handelTableSelection}
     on:keydown={handelTableSelection}
     bind:this={table.table}
 >
-    <div
-        style="--top-border-color: {$table.color}"
-        class={"table-name" +
-            (isTableSelected == true ? " table-name-selected" : "")}
-    >
-        <span>{$table.name}</span>
+    <div class="table-name" style="--backcolor:{$table.color}">
+        {$table.name}
     </div>
-    <div class="table-columns">
+    <div class="table-body">
         {#each $table.columns as col}
-            <TableColumn table={table} column={col} isTableDragged={isTableDragged}/>
+            <TableColumn column={col} {table} />
         {/each}
     </div>
 </div>
 
 <style>
-    .table-card {
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        min-width: 250px;
-        max-width: 300px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        user-select: none;
-        cursor: pointer;
-        overflow: hidden;
-    }
-
-    .table-card-selected {
-        border: 3px solid #5a67d8;
-    }
-
-    .table-columns {
-        display: flex;
-        flex-direction: column;
-    }
-
     .table-name {
-        display: inline-block;
+        background-color: var(--backcolor);
         text-align: center;
-        background-color: rgb(235, 244, 255);
-        color: #614bcd;
-        font-weight: 1000;
-        font-size: 1.1em;
-        border-left: 1px solid rgb(222, 229, 236);
-        border-bottom: 1px solid rgb(222, 229, 236);
-        border-right: 1px solid rgb(222, 229, 236);
-        border-top: 10px solid var(--top-border-color);
-        padding: 10px 0px;
+        padding: 10px;
+        color: rgb(37, 34, 83);
+        font-weight: bold;
     }
-    .table-name-selected {
-        border-left: 0px solid;
-        border-right: 0px solid;
-    }
-
-    .table-column {
+    .table-box {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 7px 0px;
+        flex-direction: column;
+        width: 300px;
+        position: absolute;
+        user-select: none;
+        background-color: rgb(255, 255, 255);
+        border-radius: 10px;
+        overflow: hidden;
+        z-index: 2;
     }
 
-    .table-column:hover {
-        background-color: rgb(245, 247, 250);
-        border-radius: 5px;
-    }
-    .table-column:hover .field-name {
-        color: rgb(94, 32, 94);
-    }
-    .table-column:hover .field-type {
-        color: rgb(94, 32, 94);
-    }
-
-    .field-name {
-        flex-grow: 1;
-        text-align: left;
-        color: rgb(91, 97, 126);
-    }
-
-    .field-type {
-        text-align: right;
-        color: rgb(178, 178, 178);
-        padding-right: 10px;
-    }
-
-    .column-constrain {
-        width: 25px;
+    .table-box-selected {
+        border:2px solid rgb(169, 32, 182); 
     }
 </style>
