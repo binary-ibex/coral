@@ -30,6 +30,8 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding-top: 10px;
+        padding-bottom: 5px;
     }
 
     .table-column-selected {
