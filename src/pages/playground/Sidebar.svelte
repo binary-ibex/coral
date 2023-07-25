@@ -1,9 +1,6 @@
 <script>
     import SidebarTable from "./SidebarTable.svelte";
     import { schema } from "../../stores/schema";
-    let _schema; 
-
-
 </script>
 
 <div class="sidebar">
@@ -61,5 +58,20 @@
     .sidebar-tables-heading {
         font-weight: 500;
         padding-left: 10px;
+    }
+
+    /* Hide the main scrollbar track */
+    .sidebar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide the scrollbar thumb (the draggable part) */
+    .sidebar::-webkit-scrollbar-thumb {
+        display: none;
+    }
+
+    /* Hide the scrollbar corner (if present) */
+    .sidebar::-webkit-scrollbar-corner {
+        display: none;
     }
 </style>

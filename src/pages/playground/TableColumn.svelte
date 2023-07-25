@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from "svelte";
     import { schema } from "../../stores/schema";
     export let table;
     export let column;
@@ -13,15 +12,12 @@
             schema.setSelectedColumn(column, table);
         }
     }
-
-    onMount(() => {
-        table.table.style.left = table.position.left + "px";
-        table.table.style.top = table.position.top + "px";
-    });
 </script>
 
 <div
-    class={"table-column" + " " + (isColumnSelected?"table-column-selected": "")}
+    class={"table-column" +
+        " " +
+        (isColumnSelected ? "table-column-selected" : "")}
     on:click={(e) => handelColumnClick(e)}
     on:keydown={(e) => handelColumnClick(e)}
 >
