@@ -5,7 +5,7 @@
 
     export let column;
     export let table;
-    let showColumnMenu = false; 
+  
 
     function handleColumnNameInput(event, column) {
         event.stopPropagation();
@@ -22,9 +22,6 @@
         schema.setSelectedColumn(col, table);
     }
 
-    function handelMenuClick(event) {
-        showColumnMenu = true; 
-    } 
 </script>
 
 <div
@@ -83,6 +80,7 @@
         outline: none;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+        font-size: 15px;
     }
 
     .sidebar-table-field-type {
@@ -94,6 +92,7 @@
         outline: none;
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+        font-size: 15px;
     }
 
     input[type="text"]:focus {

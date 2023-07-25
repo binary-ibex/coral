@@ -70,6 +70,8 @@
         padding: 10px;
         color: rgb(37, 34, 83);
         font-weight: bold;
+        inline-size: 100%;
+        overflow-wrap: break-word;
     }
     .table-box {
         display: flex;

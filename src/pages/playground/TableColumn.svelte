@@ -26,22 +26,31 @@
 </div>
 
 <style>
-    .field-name,
-    .field-type {
-        max-width: 100px;
-        padding: 10px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        color: #404a58;
-    }
-
     .table-column {
         display: flex;
         justify-content: space-between;
+        align-items: center;
     }
 
     .table-column-selected {
         background-color: rgb(244, 240, 253);
+    }
+
+    .field-name {
+        inline-size: 150px;
+        overflow-wrap: break-word;
+        width: 50%;
+        color: #333;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-weight: 500;
+    }
+
+    .field-type {
+        inline-size: 150px;
+        overflow-wrap: break-word;
+        width: 40%;
+        color: #858585;
+        font-weight: 500;
     }
 </style>

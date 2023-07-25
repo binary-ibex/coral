@@ -127,6 +127,11 @@
 </div>
 
 <style>
+    .sidebar-table-header-table-name {
+        overflow-x: hidden;
+        width: 40%;
+        text-overflow: ellipsis;
+    }
     .sidebar-table-header-table-name-input {
         border: none;
         padding: 5px;
