@@ -1,14 +1,15 @@
 <script>
     import TableColumn from "./TableColumn.svelte";
 
-    import { onMount } from "svelte";
     import { schema } from "../../stores/schema";
     export let table;
+    let localTable; 
 
     let xOffset, yOffset;
     let ix, iy;
     let selectionLocked = false;
     $: isTableSelected = $schema.selectedTable == table;
+    $: color = $table.color; 
     let isTableDragged = false;
 
     function handelTableSelection(e) {
@@ -18,16 +19,12 @@
         }
     }
 
-    function lockSelection(event) {
+    function handleMouseDown(event) {
         selectionLocked = true;
         ix = event.clientX;
         iy = event.clientY;
-        xOffset = event.clientX - table.table.offsetLeft;
-        yOffset = event.clientY - table.table.offsetTop;
-    }
-
-    function handleMouseDown(event) {
-        lockSelection(event);
+        xOffset = event.clientX - localTable.offsetLeft;
+        yOffset = event.clientY - localTable.offsetTop;
     }
 
     function handelMouseUp(event) {
@@ -39,27 +36,24 @@
         if (selectionLocked) {
             table.position.left = event.clientX - xOffset;
             table.position.top = event.clientY - yOffset;
-            table.table.style.left = `${table.position.left}px`;
-            table.table.style.top = `${table.position.top}px`;
+            localTable.style.left = `${table.position.left}px`;
+            localTable.style.top = `${table.position.top}px`;
         }
     }
 
-    onMount(() => {
-        table.table.style.left = table.position.left + "px";
-        table.table.style.top = table.position.top + "px";
-    });
 </script>
 
 <svelte:window on:mousemove={handelMouseMove} on:mouseup={handelMouseUp} />
 
 <div
     class={"table-box" + " " + (isTableSelected == true?"table-box-selected":"")}
+    style="left:{$table.position.left}px;top:{$table.position.top}px"
     on:mousedown={(e) => handleMouseDown(e)}
     on:click={handelTableSelection}
     on:keydown={handelTableSelection}
-    bind:this={table.table}
+    bind:this={localTable}
 >
-    <div class="table-name" style="--backcolor:{$table.color}">
+    <div class="table-name" style="--backcolor:{color}">
         {$table.name}
     </div>
     <div class="table-body">
